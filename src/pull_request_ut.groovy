@@ -71,7 +71,9 @@ pipeline {
           }
         }
         withCredentials([usernamePassword(credentialsId: '2b498f25-c7ea-4f67-b416-479c2f92b48f', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-          env.password = $PASSWORD
+          script {
+            env.password = $PASSWORD
+          }
         }
       }
       post {
