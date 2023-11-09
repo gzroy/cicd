@@ -32,7 +32,7 @@ pipeline {
     ZONE = "us-central1"
     PROJECT_ID = "curious-athlete-401708"
     CREDENTIAL_ID = '2b498f25-c7ea-4f67-b416-479c2f92b48f'
-    CREDENTIAL = credentials($CREDENTIAL_ID)
+    CREDENTIAL = credentials('2b498f25-c7ea-4f67-b416-479c2f92b48f')
   }
   stages{
     stage("git checkout") {
