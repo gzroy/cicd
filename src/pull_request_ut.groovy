@@ -50,9 +50,10 @@ pipeline {
       }
     }
     stage("Check credentials") {
-      withCredentials([usernamePassword(credentialsId: '2b498f25-c7ea-4f67-b416-479c2f92b48f', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')])
       steps {
-        sh 'echo $PASSWORD'
+        withCredentials([usernamePassword(credentialsId: '2b498f25-c7ea-4f67-b416-479c2f92b48f', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+          sh 'echo $PASSWORD'
+        }
       }
     }
     /*
