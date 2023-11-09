@@ -35,11 +35,6 @@ pipeline {
     PROJECT_ID = "curious-athlete-401708"
     CREDENTIAL_ID = '2b498f25-c7ea-4f67-b416-479c2f92b48f'
     CREDENTIAL = credentials('2b498f25-c7ea-4f67-b416-479c2f92b48f')
-    script {
-      def jsonSlurper = new JsonSlurper()
-      def envconfig = jsonSlurper.parse(new File('env.json'))
-      println "envconfig = $envconfig"
-    }
   }
   stages{
     stage("git checkout") {
@@ -55,6 +50,9 @@ pipeline {
             credentialsId: CREDENTIAL_ID,
             branch: ref
           )
+          def jsonSlurper = new JsonSlurper()
+          def envconfig = jsonSlurper.parse(new File('env.json'))
+          println "envconfig = $envconfig"
         }
       }
     }
