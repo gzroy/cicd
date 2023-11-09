@@ -1,5 +1,3 @@
-import groovy.json.JsonSlurper
-
 pipeline {
   agent{
     kubernetes{
@@ -50,21 +48,15 @@ pipeline {
             credentialsId: CREDENTIAL_ID,
             branch: ref
           )
-          def jsonSlurper = new JsonSlurper()
-          def envconfig = jsonSlurper.parse(new File('env.json'))
-          println "envconfig = $envconfig"
         }
+      }
+    }
+    stage("Check credentials") {
+      steps {
+        sh 'echo $DEV_PROJECTID'
       }
     }
     /*
-    stage("Check credentials") {
-      steps {
-        withCredentials([usernamePassword(credentialsId: '2b498f25-c7ea-4f67-b416-479c2f92b48f', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-          sh 'echo $PASSWORD'
-        }
-      }
-    }
-    */
     stage("test"){
       when {
         expression {
@@ -101,5 +93,6 @@ pipeline {
         }
       }
     }
+    */
   }
 }
