@@ -28,12 +28,14 @@ pipeline {
       token: 'abc'
     )
   }
+  /*
   environment {
     ZONE = "us-central1"
     PROJECT_ID = "curious-athlete-401708"
     CREDENTIAL_ID = '2b498f25-c7ea-4f67-b416-479c2f92b48f'
     CREDENTIAL = credentials('2b498f25-c7ea-4f67-b416-479c2f92b48f')
   }
+  */
   stages{
     stage("git checkout") {
       when {
@@ -51,12 +53,6 @@ pipeline {
         }
       }
     }
-    stage("Check credentials") {
-      steps {
-        sh 'echo $DEV_PROJECTID'
-      }
-    }
-    /*
     stage("test"){
       when {
         expression {
@@ -69,13 +65,16 @@ pipeline {
             sh 'mvn test '
           }
         }
+        script {
+          env.CREDENTIAL = credentials(CREDENTIAL_ID)
+        }
       }
       post {
         failure {
           sh """
           (curl -L -X POST \
           -H \"Accept: application/vnd.github+json\" \
-          -H \"Authorization: Bearer ${CREDENTIAL_PSW}\" \
+          -H \"Authorization: Bearer ${env.CREDENTIAL_PSW}\" \
           -H \"X-GitHub-Api-Version: 2022-11-28\" \
           ${comments_url} \
           -d \'{\"body\": \"UT test failure for commit ${sha}\"}\')
@@ -85,7 +84,7 @@ pipeline {
           sh """
           (curl -L -X POST \
           -H \"Accept: application/vnd.github+json\" \
-          -H \"Authorization: Bearer ${CREDENTIAL_PSW}\" \
+          -H \"Authorization: Bearer ${env.CREDENTIAL_PSW}\" \
           -H \"X-GitHub-Api-Version: 2022-11-28\" \
           ${comments_url} \
           -d \'{\"body\": \"UT test success for commit ${sha}\"}\')
@@ -93,6 +92,5 @@ pipeline {
         }
       }
     }
-    */
   }
 }
