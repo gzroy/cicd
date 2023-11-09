@@ -81,7 +81,7 @@ pipeline {
           sh """
           (curl -L -X POST \
           -H \"Accept: application/vnd.github+json\" \
-          -H \"Authorization: Bearer ${env.password}\" \
+          -H \"Authorization: Bearer ${password}\" \
           -H \"X-GitHub-Api-Version: 2022-11-28\" \
           ${comments_url} \
           -d \'{\"body\": \"UT test failure for commit ${sha}\"}\')
@@ -91,7 +91,7 @@ pipeline {
           sh """
           (curl -L -X POST \
           -H \"Accept: application/vnd.github+json\" \
-          -H \"Authorization: Bearer ${env.password}\" \
+          -H \"Authorization: Bearer ${password}\" \
           -H \"X-GitHub-Api-Version: 2022-11-28\" \
           ${comments_url} \
           -d \'{\"body\": \"UT test success for commit ${sha}\"}\')
