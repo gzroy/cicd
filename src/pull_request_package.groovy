@@ -5,23 +5,17 @@ pipeline {
         apiVersion: v1
         kind: Pod
         spec:
-          volumes:
-          - name: maven-pv-storage
-            persistentVolumeClaim:
-              claimName: maven-repo-storage
           containers:
           - name: maven
             image: maven:3.8.3-openjdk-17
             tty: true
             imagePullPolicy: "IfNotPresent"
-            volumeMounts:
-            - mountPath: '/root/.m2/repository', 
-              name: maven-repo-storage
             command:
             - cat
         '''
     }
   }
+  /*
   triggers {
     GenericTrigger(
       genericVariables: [
@@ -35,8 +29,10 @@ pipeline {
       token: 'abc'
     )
   }
+  */
   environment {
     CREDENTIAL = credentials("${CREDENTIAL_ID}")
+    PACKAGE_STATUS = "success"
   }
   stages{
     stage("git checkout") {
@@ -50,21 +46,16 @@ pipeline {
           git(
             url: clone_url,
             credentialsId: CREDENTIAL_ID,
-            branch: ref
+            branch: 'main'
           )
         }
       }
     }
-    stage("test"){
-      when {
-        expression {
-          return action=="opened" || action=="synchronize"
-        }
-      }
+    stage("package"){
       steps{
         container('maven') {
           script{
-            sh 'mvn test '
+            sh 'mvn clean package '
           }
         }
       }
