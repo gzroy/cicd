@@ -15,7 +15,7 @@ pipeline {
             tty: true
             imagePullPolicy: "IfNotPresent"
             volumeMounts:
-            - mountPath: '/root/.m2/repository', 
+            - mountPath: '/root/.m2/repository' 
               name: maven-repo-storage
             command:
             - cat
