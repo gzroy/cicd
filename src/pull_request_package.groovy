@@ -5,10 +5,6 @@ pipeline {
         apiVersion: v1
         kind: Pod
         spec:
-          hostAliases:
-          - ip: "169.254.169.254"
-            hostnames:
-              - metadata.google.internal
           volumes:
           - name: maven-pv-storage
             persistentVolumeClaim:
@@ -30,6 +26,9 @@ pipeline {
             args:
             - 9999999
           serviceAccountName: "jenkins-sa"
+          nodeSelector:
+            iam.gke.io/gke-metadata-server-enabled: "true"
+
         '''
     }
   }
