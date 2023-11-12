@@ -24,7 +24,7 @@ pipeline {
             command:
             - cat
           - name: kaniko
-            image: gcr.io/kaniko-project/executor:1.18.0-debug
+            image: gcr.io/kaniko-project/executor:debug
             command:
             - sleep
             args:
