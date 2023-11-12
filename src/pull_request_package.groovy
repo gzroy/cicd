@@ -27,9 +27,8 @@ pipeline {
             - 9999999
           serviceAccountName: "jenkins-sa"
           nodeSelector:
-            iam.gke.io/gke-metadata-server-enabled: "true"
-
-        '''
+              iam.gke.io/gke-metadata-server-enabled: "true"
+      '''
     }
   }
   triggers {
