@@ -12,24 +12,26 @@ pipeline {
             imagePullPolicy: "IfNotPresent"
             command:
             - cat
+          - name: kaniko
+            image: gcr.io/kaniko-project/executor:debug
+            command:
+            - sleep
+            args:
+            - 9999999
         '''
     }
   }
-  /*
   triggers {
     GenericTrigger(
       genericVariables: [
         [key: 'action', value: '$.action', expressionType: 'JSONPath'],
         [key: 'clone_url', value: '$.pull_request.base.repo.clone_url', expressionType: 'JSONPath'],
         [key: 'ref', value: '$.pull_request.head.ref', expressionType: 'JSONPath'],
-        [key: 'sha', value: '$.pull_request.head.sha', expressionType: 'JSONPath'],
-        [key: 'number', value: '$.number', expressionType: 'JSONPath'],
-        [key: 'comments_url', value: '$.pull_request.comments_url', expressionType: 'JSONPath']
+        [key: 'name', value: '$.pull_request.base.repo.name', expressionType: 'JSONPath']
       ],
       token: 'abc'
     )
   }
-  */
   environment {
     CREDENTIAL = credentials("${CREDENTIAL_ID}")
     PACKAGE_STATUS = "success"
@@ -38,7 +40,7 @@ pipeline {
     stage("git checkout") {
       when {
         expression {
-          return action=="opened" || action=="synchronize"
+          return action=="closed"
         }
       }
       steps {
@@ -46,39 +48,38 @@ pipeline {
           git(
             url: clone_url,
             credentialsId: CREDENTIAL_ID,
-            branch: 'main'
+            branch: ref
           )
         }
       }
     }
     stage("package"){
+      when {
+        expression {
+          return action=="closed"
+        }
+      }
       steps{
         container('maven') {
           script{
-            sh 'mvn clean package '
+            sh 'mvn clean package'
+            sh 'mkdir target/extracted'
+            sh 'java -Djarmode=layertools -jar target/*.jar extract --destination target/extracted'
           }
         }
       }
-      post {
-        failure {
-          sh """
-          (curl -L -X POST \
-          -H \"Accept: application/vnd.github+json\" \
-          -H \"Authorization: Bearer ${env.CREDENTIAL_PSW}\" \
-          -H \"X-GitHub-Api-Version: 2022-11-28\" \
-          ${comments_url} \
-          -d \'{\"body\": \"UT test failure for commit ${sha}\"}\')
-          """
+    }
+    stage("Build image and push to registry") {
+      when {
+        expression {
+          return action=="closed"
         }
-        success {
-          sh """
-          (curl -L -X POST \
-          -H \"Accept: application/vnd.github+json\" \
-          -H \"Authorization: Bearer ${env.CREDENTIAL_PSW}\" \
-          -H \"X-GitHub-Api-Version: 2022-11-28\" \
-          ${comments_url} \
-          -d \'{\"body\": \"UT test success for commit ${sha}\"}\')
-          """
+      }
+      steps {
+        container('kaniko') {
+          script {
+            sh "/kaniko/executor --context `pwd` --destination asia-southeast1-docker.pkg.dev/curious-athlete-401708/roy-repo/${name}:0.0.1"
+          }
         }
       }
     }
