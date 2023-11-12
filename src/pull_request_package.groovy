@@ -5,11 +5,18 @@ pipeline {
         apiVersion: v1
         kind: Pod
         spec:
+          volumes:
+          - name: maven-pv-storage
+            persistentVolumeClaim:
+              claimName: maven-repo-storage
           containers:
           - name: maven
             image: maven:3.8.3-openjdk-17
             tty: true
             imagePullPolicy: "IfNotPresent"
+            volumeMounts:
+            - mountPath: '/root/.m2/repository' 
+              name: maven-pv-storage
             command:
             - cat
           - name: kaniko
@@ -18,6 +25,7 @@ pipeline {
             - sleep
             args:
             - 9999999
+          serviceAccountName: "jenkins-sa"
         '''
     }
   }
