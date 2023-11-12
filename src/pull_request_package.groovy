@@ -86,7 +86,7 @@ pipeline {
       steps {
         container('kaniko') {
           script {
-            sh "/kaniko/executor --context `pwd` --destination asia-southeast1-docker.pkg.dev/curious-athlete-401708/roy-repo/${name}:0.0.1"
+            sh "/kaniko/executor --verbosity debug --context `pwd` --destination asia-southeast1-docker.pkg.dev/curious-athlete-401708/roy-repo/${name}:0.0.1"
           }
         }
       }
