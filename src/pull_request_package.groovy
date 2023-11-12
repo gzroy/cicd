@@ -5,6 +5,10 @@ pipeline {
         apiVersion: v1
         kind: Pod
         spec:
+          hostAliases:
+          - ip: "169.254.169.254"
+            hostnames:
+              - metadata.google.internal
           volumes:
           - name: maven-pv-storage
             persistentVolumeClaim:
