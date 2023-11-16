@@ -20,7 +20,7 @@ pipeline {
           )
         }
       }
-    }4
+    }
     stage("terraform init") {
       steps {
         sh 'terraform version'
