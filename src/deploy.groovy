@@ -21,7 +21,7 @@ pipeline {
       steps {
         script {
           git(
-            url: clone_url,
+            url: 'https://github.com/gzroy/cicd.git',
             credentialsId: CREDENTIAL_ID,
             branch: "main"
           )
