@@ -49,7 +49,7 @@ pipeline {
         }
       }
     }
-    stage("terraform plan") {
+    stage("terraform apply") {
       steps {
         container('terraform') {
           script {
