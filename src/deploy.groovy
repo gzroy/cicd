@@ -11,6 +11,7 @@ pipeline {
   }
   tools {
     git "Default"
+    terraform "Default"
   }
   stages{
     stage("git checkout") {
