@@ -5,6 +5,13 @@ pipeline {
         apiVersion: v1
         kind: Pod
         spec:
+        containers:
+          - name: terraform
+            image: hashicorp/terraform:latest
+            tty: true
+            imagePullPolicy: "IfNotPresent"
+            command:
+            - cat
           serviceAccountName: "jenkins-sa"
       '''
     }
@@ -27,14 +34,29 @@ pipeline {
     }
     stage("terraform init") {
       steps {
-        sh 'which git'
-        sh 'terraform version'
-        sh 'terraform init'
+        container('terraform') {
+          script {
+            sh 'terraform init'
+          }
+        }
       }
     }
     stage("terraform plan") {
       steps {
-        sh 'terraform plan'
+        container('terraform') {
+          script {
+            sh 'terraform plan'
+          }
+        }
+      }
+    }
+    stage("terraform plan") {
+      steps {
+        container('terraform') {
+          script {
+            sh 'terraform apply'
+          }
+        }
       }
     }
   }
