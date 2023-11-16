@@ -26,6 +26,7 @@ pipeline {
     }
     stage("terraform init") {
       steps {
+        sh 'which git'
         sh 'terraform version'
         sh 'terraform init'
       }
