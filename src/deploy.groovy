@@ -16,7 +16,7 @@ pipeline {
           git(
             url: 'https://github.com/gzroy/cicd.git',
             credentialsId: CREDENTIAL_ID,
-            branch: "main"
+            branch: "master"
           )
         }
       }
