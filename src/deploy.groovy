@@ -10,7 +10,7 @@ pipeline {
     }
   }
   tools {
-    git "default"
+    git "Default"
   }
   stages{
     stage("git checkout") {
