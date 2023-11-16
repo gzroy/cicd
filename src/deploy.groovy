@@ -9,6 +9,9 @@ pipeline {
       '''
     }
   }
+  tools {
+    git "default"
+  }
   stages{
     stage("git checkout") {
       steps {
