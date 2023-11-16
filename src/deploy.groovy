@@ -7,7 +7,7 @@ pipeline {
         spec:
           containers:
           - name: terraform
-            image: hashicorp/terraform:latest
+            image: hashicorp/terraform:1.6
             tty: true
             imagePullPolicy: "IfNotPresent"
             command:
@@ -53,7 +53,7 @@ pipeline {
       steps {
         container('terraform') {
           script {
-            sh 'terraform apply'
+            sh 'terraform apply -input=false'
           }
         }
       }
