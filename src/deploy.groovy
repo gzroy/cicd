@@ -5,7 +5,7 @@ pipeline {
         apiVersion: v1
         kind: Pod
         spec:
-        containers:
+          containers:
           - name: terraform
             image: hashicorp/terraform:latest
             tty: true
@@ -31,6 +31,32 @@ pipeline {
         }
       }
     }
-
+    stage("terraform init") {
+      steps {
+        container('terraform') {
+          script {
+            sh 'terraform init'
+          }
+        }
+      }
+    }
+    stage("terraform plan") {
+      steps {
+        container('terraform') {
+          script {
+            sh 'terraform plan'
+          }
+        }
+      }
+    }
+    stage("terraform plan") {
+      steps {
+        container('terraform') {
+          script {
+            sh 'terraform apply'
+          }
+        }
+      }
+    }
   }
 }
