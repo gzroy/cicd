@@ -5,13 +5,6 @@ pipeline {
         apiVersion: v1
         kind: Pod
         spec:
-          containers:
-          - name: terraform
-            image: hashicorp/terraform:latest
-            tty: true
-            imagePullPolicy: "IfNotPresent"
-            command:
-            - cat
           serviceAccountName: "jenkins-sa"
       '''
     }
@@ -27,7 +20,7 @@ pipeline {
           )
         }
       }
-    }
+    }4
     stage("terraform init") {
       steps {
         sh 'terraform version'
