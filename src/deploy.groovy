@@ -53,7 +53,7 @@ pipeline {
       steps {
         container('terraform') {
           script {
-            sh 'terraform apply -input=false'
+            sh 'terraform apply -input=false -auto-approve'
           }
         }
       }
