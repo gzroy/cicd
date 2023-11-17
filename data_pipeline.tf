@@ -1,3 +1,17 @@
+terraform {
+  required_providers {
+    google = {
+      source = "hashicorp/google"
+      version = "4.51.0"
+    }
+  }
+}
+
+provider "google" {
+  project = "curious-athlete-401708"
+  region  = "asia-southeast1"
+}
+
 resource "google_data_pipeline_pipeline" "primary" {
   name         = "telematics-usage-pipeline"
   display_name = "telematics-usage-pipeline"
