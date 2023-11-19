@@ -7,8 +7,8 @@ terraform {
 }
 
 provider "google" {
-  project = "curious-athlete-401708"
-  region  = "asia-southeast1"
+  project = var.project
+  region  = var.region
 }
 
 resource "google_data_pipeline_pipeline" "primary" {
@@ -16,11 +16,11 @@ resource "google_data_pipeline_pipeline" "primary" {
   display_name = "telematics-usage-pipeline"
   type         = "PIPELINE_TYPE_BATCH"
   state        = "STATE_ACTIVE"
-  region       = "asia-southeast2"
+  region       = var.region
 
   workload {
     dataflow_flex_template_request {
-      project_id = "curious-athlete-401708"
+      project_id = var.project
       launch_parameter {
         job_name = "telematics-usage-pipeline-`date +%Y%m%d-%H%M%S`"
         parameters = {
